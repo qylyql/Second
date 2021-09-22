@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Second</string>
+    <string name="hello">helloswufe</string>
+    <string name="btn_login">Login</string>
+    <string name="logo">IBM</string>
+    <string name="btn_label">button</string>
+    <string name="hello_android">Hello Android</string>
+    <string name="points3_label">+3 points</string>
+    <string name="points2_label">+2 points</string>
+    <string name="points1_label">+1 point</string>
+    <string name="point3_label">+3 points</string>
+    <string name="point2_label">+2 points</string>
+    <string name="point1_label">+1 point</string>
+    <string name="teama_label">TeamA</string>
+    <string name="teamab_label">TeamB</string>
+    <string name="reset_label">reset</string>
+
+
+
+</resources>
