@@ -44,6 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/points3_label"
+                android:gravity="center"
+
                 android:layout_marginTop="12dp"
                 android:onClick="click"/>
             <Button
@@ -51,6 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/points2_label"
+                android:gravity="center"
+
                 android:layout_marginTop="12dp"
                 android:onClick="click"/>
             <Button
@@ -58,6 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/points1_label"
+                android:gravity="center"
+
                 android:layout_marginTop="12dp"
                 android:onClick="click"/>
         </LinearLayout>

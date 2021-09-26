@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Second</string>
-    <string name="hello">helloswufe</string>
     <string name="btn_login">Login</string>
     <string name="logo">IBM</string>
     <string name="btn_label">button</string>
@@ -13,8 +12,15 @@
     <string name="point1_label">+1 point</string>
     <string name="teama_label">TeamA</string>
     <string name="teamab_label">TeamB</string>
+    <string name="hello1">Hello</string>
     <string name="reset_label">reset</string>
 
+    <string name="rmb"></string>
+    <string name="dollar">DOLLAR</string>
+    <string name="eudo">EURO</string>
+    <string name="won">WON</string>
+    <string name="btn_open_label">Open Activity</string>
+    <string name="menu_setting">setting</string>
 
 
 </resources>

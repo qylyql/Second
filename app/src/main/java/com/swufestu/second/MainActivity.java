@@ -1,6 +1,9 @@
 package com.swufestu.second;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EditText input1= findViewById(R.id.height);
+        EditText input1 = findViewById(R.id.height);
         EditText input2 = findViewById(R.id.weight);
         Button btn = findViewById(R.id.btn_count);
         btn.setOnClickListener(this);
@@ -27,13 +30,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(TAG, "onClick: BMI");
 
         //获取用户输入
-        EditText input1= findViewById(R.id.height);
+        EditText input1 = findViewById(R.id.height);
         EditText input2 = findViewById(R.id.weight);
         Double height = Double.parseDouble(input1.getText().toString());
         Double weight = Double.parseDouble(input1.getText().toString());
         Double bmi = weight / (height * height);
 
-        TextView resault = (TextView)findViewById(R.id.txt);
+        TextView resault = (TextView) findViewById(R.id.txt);
         if (bmi < 18.5) {
             resault.setText("BMI" + bmi.toString() + ",您的体重偏轻");
         } else if (bmi <= 24.9) {
@@ -47,6 +50,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             resault.setText("BMI" + bmi.toString() + ",您的体重严重肥胖!!!!!!!");
         }
+
+
+    }
+
+    public void open(View v) {
+        Log.i(TAG, "open:1111111111 ");
+        Intent first = new Intent(this, FirstActivity.class);
+        //Intent first =new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.jd.com"));
+
+        //first.putExtra();
+        startActivity(first);
     }
 }
 
