@@ -2,8 +2,11 @@ package com.swufestu.second;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -43,23 +46,31 @@ public class ThirdActivity extends AppCompatActivity {
         float newEuro=Float.parseFloat(euroText.getText().toString());
         float newWon=Float.parseFloat(wonText.getText().toString());
 
+
+        //保存数据到sp
+        saveToSP(newDollar,newEuro,newWon);
+
         Intent first=getIntent();
-        Bundle bdl = new Bundle();
-        bdl.putFloat("dollar_key3",newDollar);
-        bdl.putFloat("euro_key3",newEuro);
+       Bundle bdl = new Bundle();
+       bdl.putFloat("dollar_key3",newDollar);
+       bdl.putFloat("euro_key3",newEuro);
         bdl.putFloat("won_key3",newWon);
         first.putExtras(bdl);
         setResult(5,first);
 
-        // first.putExtra("dollar_key2",newDollar);
-       // first.putExtra("euro_key2",newEuro);
-       // first.putExtra("won_key2",newWon);
-       // setResult(3,first);
+
 
         //关闭当前窗口
         finish();
 
+    }
 
-
+    private void saveToSP(float newDollar, float newEuro, float newWon) {
+        SharedPreferences sharedPreferences=getSharedPreferences("myrate",Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putFloat("dollar_rate", newDollar);
+        editor.putFloat("euro_rate", newEuro);
+        editor.putFloat("won_rate", newWon);
+        editor.apply();
     }
 }

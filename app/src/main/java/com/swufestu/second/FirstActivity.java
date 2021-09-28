@@ -2,8 +2,13 @@ package com.swufestu.second;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,38 +17,74 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FirstActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-
+public class FirstActivity extends AppCompatActivity implements  Runnable{
     private static final String TAG = "FirstActivity";
-
-    float dollar_rate = 0.35f;
-    float euro_rate = 0.28f;
-    float won_rate = 501f;
-
+   // float dollar_rate = 0.35f;
+   // float euro_rate = 0.28f;
+    //float won_rate = 501f;
+    float dollarRate = 0.35f;
+    float euroRate = 0.28f;
+    float wonRate = 501f;
+    Handler handler;
+    TextView result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+        result=findViewById(R.id.result);
+
+        //获取文件中保存的数据
+        SharedPreferences sharedPreferences=getSharedPreferences("myrate", Activity.MODE_PRIVATE);
+        //PreferenceManager.getDefaultSharedPreferences(this);
+        dollarRate=sharedPreferences.getFloat("dollar_rate",0.35f);
+        euroRate=sharedPreferences.getFloat("euro_rate",0.28f);
+        wonRate=sharedPreferences.getFloat("won_rate",501f);
+        Log.i(TAG, "onCreat: dollarRate="+dollarRate);
+        Log.i(TAG, "onCreat: euroRate= "+euroRate);
+        Log.i(TAG, "onCreat: wonRate=" + wonRate);
+
+        handler=new Handler(Looper.myLooper()){
+            public void handleMessage(Message msg){
+                Log.i(TAG, "handleMessage: 收到消息");
+                if(msg.what==6){
+                    String str=(String)msg.obj;
+                    Log.i(TAG, "handleMessage: str="+str);
+                    result.setText(str);
+                }
+                super.handleMessage(msg);
+            }
+        };
+
+        Thread thread = new Thread(this);
+        thread.start();
+
     }
 
     public void click(View btn) {
 
         Log.i(TAG, "click: ");
         EditText rmb = findViewById(R.id.input_rmb);
-        TextView result = findViewById(R.id.result);
+        //TextView result = findViewById(R.id.result);
         String inp = rmb.getText().toString();
         Log.i(TAG, "click: click:inp=" + inp);
         if (inp!=null&&inp.length() > 0) {
             float num = Float.parseFloat(inp);
             float r = 0;
             if (btn.getId() == R.id.btn_dollar) {
-                r = num * dollar_rate;
+                r = num * dollarRate;
             } else if (btn.getId() == R.id.btn_euro) {
-                r = num * euro_rate;
+                r = num * euroRate;
             } else {
-                r = num * won_rate;
+                r = num * wonRate;
             }
             Log.i(TAG, "click: r=" + r);
             result.setText(String.valueOf(r));
@@ -52,25 +93,6 @@ public class FirstActivity extends AppCompatActivity {
             result.setText(R.string.hello1);
         }
     }
-/*
-    public void openOne(View btn) {
-        Log.i(TAG, "open:1111111111 ");
-        Intent config = new Intent(this, ThirdActivity.class);
-        //Intent first =new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.jd.com"));
-
-        config.putExtra("dollar_rate_key",dollarRate);
-        config.putExtra("euro_rate_key",euroRate);
-        config.putExtra("won_rate_key",wonRate);
-
-        Log.i(TAG, "openOne: dollorRate="+dollorRate);
-        Log.i(TAG, "openOne: euroRate="+euroRate);
-        Log.i(TAG, "openOne: wonRate="+wonRate);
-
-        startActivity(config);
-        startActivityForResult(config,1000);
-    }
-*/
-
 
     public void openConfig(View btn){
         Log.i(TAG, "openConfig: ");
@@ -79,12 +101,12 @@ public class FirstActivity extends AppCompatActivity {
 
     private void config() {
         Intent config=new Intent(this,ThirdActivity.class);
-        config.putExtra("dollar_rate_key",dollar_rate);
-        config.putExtra("euro_rate_key",euro_rate);
-        config.putExtra("won_rate_key",won_rate);
-        Log.i(TAG, "openConfig: dollar_rate="+dollar_rate);
-        Log.i(TAG, "openConfig: euro_rate="+euro_rate);
-        Log.i(TAG, "openConfig: won_rate="+won_rate);
+        config.putExtra("dollar_rate_key",dollarRate);
+        config.putExtra("euro_rate_key",euroRate);
+        config.putExtra("won_rate_key",wonRate);
+        Log.i(TAG, "openConfig: dollar_rate="+dollarRate);
+        Log.i(TAG, "openConfig: euro_rate="+euroRate);
+        Log.i(TAG, "openConfig: won_rate="+wonRate);
 
         //startActivity(config);
         startActivityForResult(config,1);
@@ -92,25 +114,26 @@ public class FirstActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         if(requestCode==1&&resultCode==3){
-            dollar_rate=data.getFloatExtra("dollar_key2",0.1f);
-            euro_rate=data.getFloatExtra("euro_key2",0.1f);
-            won_rate=data.getFloatExtra("won_key2",0.1f);
+            dollarRate=data.getFloatExtra("dollar_key2",0.1f);
+            euroRate=data.getFloatExtra("euro_key2",0.1f);
+            wonRate=data.getFloatExtra("won_key2",0.1f);
 
-            Log.i(TAG, "onActivityResult: dollar_rate=" +
-                    ""+dollar_rate);
-            Log.i(TAG, "onActivityResult: euro_rate="+euro_rate);
-            Log.i(TAG, "onActivityResult: won_rate="+won_rate);
+            Log.i(TAG, "onActivityResult: dollar_rate="+dollarRate);
+            Log.i(TAG, "onActivityResult: euro_rate="+euroRate);
+            Log.i(TAG, "onActivityResult: won_rate="+wonRate);
 
 
-        }else if(requestCode==1&&resultCode==5){
+        }else if(requestCode==1&&resultCode==5)
+             {
             Bundle bundle=data.getExtras();
-            dollar_rate=bundle.getFloat("dollar_key3",1);
-            euro_rate=bundle.getFloat("euro_key3",1);
-            won_rate=bundle.getFloat("won_key3",1);
+                 dollarRate=bundle.getFloat("dollar_key3",1);
+                 euroRate=bundle.getFloat("euro_key3",1);
+                 wonRate=bundle.getFloat("won_key3",1);
 
-            Log.i(TAG, "onActivityResult: dollar_rate3="+dollar_rate);
-            Log.i(TAG, "onActivityResult: euro_rate3= "+euro_rate);
-            Log.i(TAG, "onActivityResult: won_rate3="+won_rate);
+                 Log.i(TAG, "onActivityResult: dollar_rate3="+dollarRate);
+                 Log.i(TAG, "onActivityResult: euro_rate3= "+euroRate);
+                 Log.i(TAG, "onActivityResult: won_rate3="+wonRate);
+
         }
         super.onActivityResult(requestCode , resultCode,data);
     }
@@ -128,6 +151,54 @@ public class FirstActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void run() {
+        Log.i(TAG, "run:run...... ");
+
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        URL url=null;
+        try {
+            Log.i(TAG, "run: fw url");
+            url =new URL("http://www.swufe.edu.cn/info/1002/18045.htm");
+            HttpURLConnection http=(HttpURLConnection)url.openConnection();
+            InputStream in =http.getInputStream();
+
+            String html= inputStream2String(in);
+            Log.i(TAG, "run: html="+html);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        //发送消息
+        Message msg=handler.obtainMessage(6);
+        //msg.what=6;
+        msg.obj="Hello from run";
+        handler.sendMessage(msg);
+        Log.i(TAG, "run: 消息已发送");
+    }
+
+    private String inputStream2String(InputStream inputStream) throws IOException {
+        final int bufferSize=1024;
+        final char[] buffer =new char[bufferSize];
+        final StringBuilder out=new StringBuilder();
+        String charsetName;
+        Reader in =new InputStreamReader(inputStream,charsetName="utf-8");
+        while (true){
+            int rsz=in.read(buffer,0,buffer.length);
+            if(rsz<0)
+                break;
+            out.append(buffer,0,rsz);
+        }
+          return  out.toString();
+
+    }
 }
 
 
