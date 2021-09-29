@@ -21,6 +21,8 @@
     <string name="won">WON</string>
     <string name="btn_open_label">Open Activity</string>
     <string name="menu_setting">setting</string>
+    <string name="loading">menu_loading</string>
+    <string name="menu_loading">loading</string>
 
 
 </resources>
