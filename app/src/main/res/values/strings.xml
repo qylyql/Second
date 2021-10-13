@@ -23,6 +23,7 @@
     <string name="menu_setting">setting</string>
     <string name="loading">menu_loading</string>
     <string name="menu_loading">loading</string>
+    <string name="rmb_hint_label">input RMB</string>
 
 
 </resources>

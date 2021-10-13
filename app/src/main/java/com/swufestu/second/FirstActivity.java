@@ -45,6 +45,11 @@ public class FirstActivity extends AppCompatActivity implements Runnable {
     TextView result;
     Handler handler;
 
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
